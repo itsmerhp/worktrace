@@ -1,0 +1,15 @@
+RewriteEngine on
+#RewriteCond %{HTTP_HOST} !^www\.(.*)$ [NC]
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]    
+
+# hide files and folders
+RedirectMatch 404 /protected
+RedirectMatch 404 /\.git
+RedirectMatch 404 /composer\.
+RedirectMatch 404 /.bowerrc
+
+# If a directory or a file exists, use the request directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Otherwise forward the request to index.php
+RewriteRule . index.php

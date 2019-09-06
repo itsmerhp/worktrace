@@ -1,0 +1,149 @@
+.ui-tooltip{
+	position: fixed;
+	background-color: #000;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: #fff;
+    max-width: 200px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    text-align: center;
+}
+.field-instructions{
+    font-size: 10px;
+}
+.get-menu-items-loader{
+    display: none;
+}
+.ui-autocomplete{
+    z-index: 1000000;
+}
+span.stars, span.stars span {
+    display: block;
+    background: url(stars.png) 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+
+span.stars span {
+    background-position: 0 0;
+}
+.supporting-img-div{
+    display: none;
+}
+.fileinput-remove-button{
+    display: none;
+}
+.cropper_widget .thumbnail{
+	height:300px !important;
+	width : 300px !important;
+	max-width : 100%;
+	margin: 0 !important;
+}
+.cropper_widget .new_photo_area{
+	height:300px !important;
+	width : 300px !important;
+	max-width : 100%; !important;
+}
+@media (max-width:486px){
+	.cropper-widget img.thumbnail{width:100% !important;}
+	.cropper-widget .new_photo_area{width:100% !important;}
+}
+.checked {
+    color: orange;
+}
+.dishImage{
+	margin-right: 15px;
+}
+.file-input .input-group.file-caption-main .form-control.file-caption.kv-fileinput-caption .file-caption-name, .file-upload-indicator{
+	display : none;
+}
+ul.thumbnails.image_picker_selector li{
+	/*width: 100px;
+	height: 100px;*/
+	border-radius: 95px;
+	text-align: center;
+	border: none;
+}
+
+ul.thumbnails.image_picker_selector li img{
+	border-radius: 100% !important;
+	width: 80px !important;
+	height: 80px !important;
+	border: 2px solid #ccc;
+}
+.field-dishes-cuisine_id,.field-dishes-meal_id,.field-dishes-quick_food_id{
+	overflow-x: scroll;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+}
+.loader {
+  color: #ffffff;
+  font-size: 11px;
+  text-indent: -99999em;
+  margin: 20px auto;
+  position: relative;
+  width: 10em;
+  height: 10em;
+  box-shadow: inset 0 0 0 1em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  content: '';
+}
+.loader:before {
+  width: 5.2em;
+  height: 10.2em;
+  background: #3c8dbc;
+  border-radius: 10.2em 0 0 10.2em;
+  top: -0.1em;
+  left: -0.1em;
+  -webkit-transform-origin: 5.2em 5.1em;
+  transform-origin: 5.2em 5.1em;
+  -webkit-animation: load2 2s infinite ease 1.5s;
+  animation: load2 2s infinite ease 1.5s;
+}
+.loader:after {
+  width: 5.2em;
+  height: 10.2em;
+  background: #3c8dbc;
+  border-radius: 0 10.2em 10.2em 0;
+  top: -0.1em;
+  left: 5.1em;
+  -webkit-transform-origin: 0px 5.1em;
+  transform-origin: 0px 5.1em;
+  -webkit-animation: load2 2s infinite ease;
+  animation: load2 2s infinite ease;
+}
+@-webkit-keyframes load2 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load2 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

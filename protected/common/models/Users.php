@@ -1,0 +1,175 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
+use yii\helpers\Url;
+use yii\behaviors\TimestampBehavior;
+use yii\base\Security;
+use yii\web\IdentityInterface;
+use api\components\CommonApiHelper;
+
+class Users extends \yii\db\ActiveRecord implements IdentityInterface
+{
+    /**
+     * @inheritdoc
+     */
+    public $auth_key;
+    const STATUS_ACTIVE = 1;
+    const ADMIN_ROLE = 1;
+    public static function tableName()
+    {
+        return 'users';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['role_id', 'user_type', 'is_otp_verified', 'status'], 'integer'],
+            [['email', 'password', 'created_at', 'updated_at'], 'required'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['email','name', 'profile_pic', 'password', 'password_reset_token', 'latitude', 'longitude'], 'string', 'max' => 255],
+            [['email'], 'unique'],
+            [['password_reset_token'], 'unique'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'user_id'                      => 'User ID',
+            'role_id'                      => 'Role',
+			'user_type'                      => 'User Type',
+            'email'                        => 'Email',
+			'name'                        => 'Name',
+            'profile_pic'                  => 'Profile Pic',
+            'password'                     => 'Password',
+            'status'                       => 'Status',
+            'password_reset_token'         => 'Password Reset Token',
+            'created_at'                   => 'Created At',
+            'updated_at'                   => 'Updated At'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class'      => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value'      => function ()
+        {
+            return time();
+        },
+            ],
+        ];
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+    
+    /**
+     * Sends email to registered user with reset password link.
+     *
+     * @param  object $user Registered user.
+     * @return bool         Whether the message has been sent successfully.
+     */
+    public function sendPasswordResetEmail($user)
+    {
+        if (!empty($user->email)) {
+            $emailformatemodel = EmailFormat::findOne(["id" => Yii::$app->params['EMAIL_TEMPLATE_ID']['forgot_password'], "status" => '1']);
+            if ($emailformatemodel)
+            {
+                $resetLink = Url::to('@siteRoot/site/reset-app-password?token=' . $user->password_reset_token, true);
+                
+                //create email body
+                $AreplaceString = array('{name}' => $user->name, '{email}' => $user->email,'{link}' => $resetLink);
+                $body       = CommonApiHelper::MailTemplate($AreplaceString, $emailformatemodel->body);
+                $ssSubject  = $emailformatemodel->subject;
+                //send email to new registered user
+                Yii::$app->mailer->compose()
+                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+                    ->setTo($user->email)
+                    ->setSubject($ssSubject)
+                    ->setHtmlBody($body)
+                    ->send();              
+                
+            }
+        }
+    }  
+    
+    /**
+     * Finds user by username
+     *
+     * @param  string      $username
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+    public function beforeSave($insert)
+    {
+        //$this->birth_date = date("Y-m-d", strtotime($this->birth_date));
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                    $this->created_at = date("Y-m-d H:i:s");
+            }
+            $this->updated_at = date("Y-m-d H:i:s");
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

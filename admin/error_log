@@ -1,0 +1,32 @@
+[06-Nov-2016 12:38:04 America/Chicago] Exception (Database Exception) 'yii\db\Exception' with message 'SQLSTATE[HY000] [2002] Connection timed out' 
+
+in /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Connection.php:550
+
+Stack trace:
+#0 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Connection.php(864): yii\db\Connection->open()
+#1 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Connection.php(851): yii\db\Connection->getMasterPdo()
+#2 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Schema.php(480): yii\db\Connection->getSlavePdo()
+#3 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Connection.php(760): yii\db\Schema->quoteValue('ddaa63d6b2f24fc...')
+#4 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Command.php(175): yii\db\Connection->quoteValue('ddaa63d6b2f24fc...')
+#5 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Command.php(869): yii\db\Command->getRawSql()
+#6 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Command.php(388): yii\db\Command->queryInternal('fetchColumn', 0)
+#7 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/web/DbSession.php(168): yii\db\Command->queryScalar()
+#8 [internal function]: yii\web\DbSession->writeSession('ddaa63d6b2f24fc...', '')
+#9 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/web/Session.php(175): session_write_close()
+#10 [internal function]: yii\web\Session->close()
+#11 {main}
+[12-Nov-2016 07:20:39 America/Chicago] Exception (Database Exception) 'yii\db\Exception' with message 'SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+The SQL being executed was: SELECT `id` FROM `session` WHERE `id`='74c1b3b5e11a2b19dfa9b41135b7f431'' 
+
+in /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Schema.php:633
+
+Stack trace:
+#0 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Command.php(915): yii\db\Schema->convertException(Object(PDOException), 'SELECT `id` FRO...')
+#1 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/db/Command.php(388): yii\db\Command->queryInternal('fetchColumn', 0)
+#2 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/web/DbSession.php(168): yii\db\Command->queryScalar()
+#3 [internal function]: yii\web\DbSession->writeSession('74c1b3b5e11a2b1...', 'SYjyEVarFFGbYLv...')
+#4 /home/xndgklcr/public_html/sotd/protected/vendor/yiisoft/yii2/web/Session.php(175): session_write_close()
+#5 [internal function]: yii\web\Session->close()
+#6 {main}
+[06-Feb-2017 11:28:40 America/Chicago] PHP Fatal error:  Class 'common\models\Restaurants' not found in /home/xndgklcr/public_html/sotd/protected/backend/views/site/index.php on line 44
+[07-Feb-2017 09:58:33 America/Chicago] PHP Fatal error:  Class 'common\models\Restaurants' not found in /home/xndgklcr/public_html/sotd/protected/backend/views/site/index.php on line 44
