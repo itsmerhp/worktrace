@@ -418,7 +418,7 @@ class ApiController extends Controller
 							'access_token'		=>	$user_access_token
 						];
 						
-						//Check if Restaurannt exist or not
+						/*//Check if Restaurannt exist or not
 						//If exist then pass Restaurant details in response
 						$restaurants = Restaurants::find()->where(['user_id' => $userdata->user_id])->one();
 						$restaurantDetails = [];
@@ -433,7 +433,7 @@ class ApiController extends Controller
 								'restaurant_long' => $restaurants->restaurant_long
 							];
 							$data['restaurant_details'] = $restaurantDetails;
-						}
+						}*/
 						$response[] = $data;
 						return CommonApiHelper::return_success_response("Login successfully.","",$response);	
 					}else{

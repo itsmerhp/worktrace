@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name'       => 'Gr8Dish',
+    'name'       => 'WorkTrace',
     //'language' => 'sr',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -47,7 +47,7 @@ return [
     ], 
     'aliases'    => [
         '@uploads' => '@appRoot/uploads',
-        '@host' => $_SERVER['SERVER_NAME']=="localhost"?"http://localhost/gr8dish/":"http://www.gr8dish1.com/",
+        '@host' => $_SERVER['SERVER_NAME']=="localhost"?"http://localhost/worktrace/":"http://www.worktrace.co.za/",
         '@themeBase' => '@host/protected/vendor/bower/admin-lte',
         '@backendURL' => '@host/admin',
     ]
