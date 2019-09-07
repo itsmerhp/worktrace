@@ -46,18 +46,13 @@ return [
     'supportEmail' => 'worktrace1@gmail.com',
     'SITE_OWNER_NAME' => 'Heidi',
     'SITE_OWNER_EMAIL' => 'worktrace1@gmail.com',
-    'DOCUMENT_ROOT' => $_SERVER["DOCUMENT_ROOT"] . "/",
+    'DOCUMENT_ROOT' => $_SERVER["DOCUMENT_ROOT"] . "/worktrace/",
     'uploads_path' => dirname(__FILE__) . '/../../../uploads/',
-    //Find restaurants in the radios of 50 miles
-    'nearByRestaurant' => 5000,
-    'nearByHomeFeed' => 4500,
     'upload_path' => 'uploads/',
     //For pagination. 20 records per page
     'records_per_page' => 10,
     //User roles
-    'USER_ROLES' => ['admin' => 1, 'app_user' => 2],
-    'USER_TYPE' => ['user' => 1, 'restaurant' => 2],
-    'USER_TYPE_VALUES' => [1 => 'Normal User', 2 => 'Restaurant User'],
+    'USER_ROLES' => ['superadmin' => 1, 'owner' => 2, 'manager' => 3, 'employee' => 4],
     'DEVICE_TYPE' => ['android' => 1, 'ios' => 2],
     //For status dropdown.
     'STATUS_SELECT' => [0 => 'Inactive', 1 => 'Active'],
@@ -65,12 +60,5 @@ return [
     'EMAIL_TEMPLATE_ID' => ['forgot_password' => 1, 'welcome' => 2, 'restaurant_otp' => 4, 'restaurant_registered' => 5],
     //GENDER
     'GENDER' => [1 => 'Male', 2 => 'Female', 3 => 'Other'],
-    'MESSAGE_COLOR' => ['success' => '#39C178', 'error' => '#FC6666', 'other' => '#444444'],
-    'AWS_KEY' => 'AKIAIEKLQCVD2SZSQRNQ',
-    'AWS_SECRET' => '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',
-    'AWS_BUCKET' => 'gr8dish',
-    'FEED_TYPE' => ['ranked' => 1, 'pull_single' => 2],
-    'LOCATION_TYPE' => ['local' => 1, 'national' => 2],
-    'LOCAL_DISTANCE' => 35,
-    'FCM_TOKEN' => 'AAAAzuF-mM8:APA91bEovsnXsSaAPzQSyWOfgtb2CMR_FO231ikJ0epI1cux9UXL6DC7GOk-vw80RaOnjF6hfIzX-KLxm37zgJvQJdIs9qWyf96Nf6h5C3tCPbWzS-UKb8UctZqJyHnR84Jkk6ImoRiX',
+    'MESSAGE_COLOR' => ['success' => '#39C178', 'error' => '#FC6666', 'other' => '#444444']
 ];

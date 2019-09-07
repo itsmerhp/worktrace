@@ -12,6 +12,7 @@ use Yii;
     * @property string $email
     * @property string $mobile
     * @property string $address
+    * @property string $company_logo
     * @property string $latitude
     * @property string $longitude
     * @property integer $status
@@ -34,7 +35,7 @@ return 'company';
 public function rules()
 {
         return [
-            [['address'], 'string'],
+            [['address', 'company_logo'], 'string'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'email', 'mobile', 'latitude', 'longitude'], 'string', 'max' => 255],
         ];
@@ -51,6 +52,7 @@ return [
     'email' => 'Email',
     'mobile' => 'Mobile',
     'address' => 'Address',
+    'company_logo' => 'Company Logo',
     'latitude' => 'Latitude',
     'longitude' => 'Longitude',
     'status' => 'Status',

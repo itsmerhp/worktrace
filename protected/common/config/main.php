@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name'       => 'WorkTrace',
+    'name' => 'WorkTrace',
     //'language' => 'sr',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -13,41 +13,41 @@ return [
                 ],
             ],
         ],
-        'cache'        => [
+        'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'urlManager'   => [
-            'class'           => 'yii\web\UrlManager',
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
-            'showScriptName'  => false,
+            'showScriptName' => false,
         ],
-        'session'      => [
+        'session' => [
             'class' => 'yii\web\DbSession',
         ],
-        'authManager'  => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'i18n'         => [
+        'i18n' => [
             'translations' => [
                 'app*' => [
-                    'class'          => 'yii\i18n\PhpMessageSource',
-                    'basePath'       => '@common/translations',
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/translations',
                     'sourceLanguage' => 'en',
                 ],
-                'yii'  => [
-                    'class'          => 'yii\i18n\PhpMessageSource',
-                    'basePath'       => '@common/translations',
+                'yii' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/translations',
                     'sourceLanguage' => 'en'
                 ],
             ],
         ],
-        'generallib'   => [
+        'generallib' => [
             'class' => 'common\components\Generallib',
         ],
-    ], 
-    'aliases'    => [
+    ],
+    'aliases' => [
         '@uploads' => '@appRoot/uploads',
-        '@host' => $_SERVER['SERVER_NAME']=="localhost"?"http://localhost/worktrace/":"http://www.worktrace.co.za/",
+        '@host' => $_SERVER['SERVER_NAME'] == "localhost" ? "http://localhost/worktrace/" : "http://www.worktrace.co.za/",
         '@themeBase' => '@host/protected/vendor/bower/admin-lte',
         '@backendURL' => '@host/admin',
     ]
