@@ -191,3 +191,7 @@ hr.article-devider {
 .nz-meter-container {
     display: none;
 }
+
+.navbar-toggle{
+    display:none;
+}

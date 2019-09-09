@@ -12,7 +12,7 @@ use Yii;
  */
 class ResetAppPasswordForm extends Model
 {
-    public $password;
+    public $password,$confirm_password;
 
     /**
      * @var \common\models\User
@@ -52,7 +52,8 @@ class ResetAppPasswordForm extends Model
     public function rules()
     {
         return [
-            ['password', 'required'],
+            [['password','confirm_password'], 'required'],
+            ['confirm_password', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             // use passwordStrengthRule() method to determine password strength
             $this->passwordStrengthRule(),
         ];

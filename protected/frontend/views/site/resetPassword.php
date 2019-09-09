@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\ResetPasswordForm */
 
-$this->title = Yii::t('app', 'Reset password');
+$this->title = Yii::t('app', 'Set password');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-reset-password">
@@ -16,12 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-lg-5 well bs-component">
 
-        <p><?= Yii::t('app', 'Please choose your new password:') ?></p>
+        <!--<p><?= Yii::t('app', 'Please choose your new password:') ?></p>-->
 
         <?php $form = ActiveForm::begin(['id' => 'reset-password-form']); ?>
 
             <?= $form->field($model, 'password')->widget(PasswordInput::classname(), []) ?>
-
+            <?= $form->field($model, 'confirm_password')->widget(PasswordInput::classname(), ['pluginOptions' => ['showMeter' => false]]) ?>
             <div class="form-group">
                 <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
             </div>

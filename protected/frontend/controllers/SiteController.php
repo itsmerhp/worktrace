@@ -369,7 +369,7 @@ class SiteController extends Controller
      */
     public function actionResetAppPassword($token)
     {
-        $this->layout = 'without-menu';
+        //$this->layout = 'without-menu';
         try
         {
             $model = new ResetAppPasswordForm($token);
@@ -394,7 +394,7 @@ class SiteController extends Controller
 
     public function actionPasswordResetSuccessfully()
     {
-        $this->layout = 'without-menu';
+        //$this->layout = 'without-menu';
         return $this->render('password-reset-successfully');
     }
 
