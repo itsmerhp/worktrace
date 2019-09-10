@@ -38,11 +38,6 @@ class OwnerController extends Controller {
         $post = Yii::$app->request->bodyParams;
         $post = array_map('trim', $post);
 
-        if (isset($post['user_id'])) {
-            $accessToken = Yii::$app->request->headers->get('access_token');
-            CommonApiHelper::checkUserStatus($post['user_id'], $accessToken);
-        }
-
         parent::init();
 
         Yii::$app->user->enableSession = false;    // no sessions for this controller
@@ -71,7 +66,7 @@ class OwnerController extends Controller {
         if (empty($userEmailCheck)) {
             return CommonApiHelper::return_success_response("Email is available");
         } else {
-            return CommonApiHelper::return_error_response('Email has been already registered. Please try with different email Id.','2');
+            return CommonApiHelper::return_error_response('Email has been already registered. Please try with different email Id.', '2');
         }
     }
 
@@ -80,13 +75,13 @@ class OwnerController extends Controller {
      */
     public function actionSignUp() {
         //validate webservice
-        $requiredParams = ['company_name','owner_name', 'email'];
+        $requiredParams = ['company_name', 'owner_name', 'email'];
 
         CommonApiHelper::validateRequestParameters($requiredParams);
 
         $response = [];
 
-        //try {
+        try {
             $transaction = Yii::$app->db->beginTransaction();
             //Get request parameters.
             $post = Yii::$app->request->bodyParams;
@@ -95,10 +90,10 @@ class OwnerController extends Controller {
             $company_name = $post['company_name'];
             $owner_name = $post['owner_name'];
             $email = $post['email'];
-            $mobile = !empty($post['mobile']) ? $post['mobile']: NULL;
-            $address = !empty($post['address']) ? $post['address']: NULL;
-            $latitude = !empty($post['latitude']) ? $post['latitude']: NULL;
-            $longitude = !empty($post['longitude']) ? $post['longitude']: NULL;
+            $mobile = !empty($post['mobile']) ? $post['mobile'] : NULL;
+            $address = !empty($post['address']) ? $post['address'] : NULL;
+            $latitude = !empty($post['latitude']) ? $post['latitude'] : NULL;
+            $longitude = !empty($post['longitude']) ? $post['longitude'] : NULL;
 
             if (isset($email) && !empty($email)) {
                 $emailExist = Users::findOne(['email' => $email]);
@@ -106,7 +101,7 @@ class OwnerController extends Controller {
                     return CommonApiHelper::return_error_response("This email is already registered, Please try with different email", "2");
                 }
             }
-            
+
             //save company
             $company = new Company();
             $company->email = $email;
@@ -115,18 +110,15 @@ class OwnerController extends Controller {
             $company->address = $address;
             $company->latitude = $latitude;
             $company->longitude = $longitude;
-            
+
             //save the company logo.
-            if (isset($_FILES['company_logo']['name']) && !empty($_FILES['company_logo']['name']))
-            {
-                $company->company_logo = time().$_FILES['company_logo']['name'];
-                move_uploaded_file($_FILES['company_logo']['tmp_name'],Yii::$app->params['DOCUMENT_ROOT'].'uploads/company_logo/'.$company->company_logo);
-            }
-            else
-            {
+            if (isset($_FILES['company_logo']['name']) && !empty($_FILES['company_logo']['name'])) {
+                $company->company_logo = time() . $_FILES['company_logo']['name'];
+                move_uploaded_file($_FILES['company_logo']['tmp_name'], Yii::$app->params['DOCUMENT_ROOT'] . 'uploads/company_logo/' . $company->company_logo);
+            } else {
                 $company->company_logo = NULL;
             }
-            if($company->save(false)){
+            if ($company->save(false)) {
                 //save owner
                 $owner = new Users();
                 $owner->role_id = Yii::$app->params['USER_ROLES']['owner'];
@@ -139,17 +131,14 @@ class OwnerController extends Controller {
                 $owner->longitude = $longitude;
                 $owner->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
                 //save owner image.
-                if (isset($_FILES['profile_pic']['name']) && !empty($_FILES['profile_pic']['name']))
-                {
-                    $owner->profile_pic = time().$_FILES['profile_pic']['name'];
-                    move_uploaded_file($_FILES['profile_pic']['tmp_name'],Yii::$app->params['DOCUMENT_ROOT'].'uploads/profile_pic/'.$owner->profile_pic);
-                }
-                else
-                {
+                if (isset($_FILES['profile_pic']['name']) && !empty($_FILES['profile_pic']['name'])) {
+                    $owner->profile_pic = time() . $_FILES['profile_pic']['name'];
+                    move_uploaded_file($_FILES['profile_pic']['tmp_name'], Yii::$app->params['DOCUMENT_ROOT'] . 'uploads/profile_pic/' . $owner->profile_pic);
+                } else {
                     $owner->profile_pic = NULL;
                 }
-                
-            
+
+
                 if ($owner->save(false)) {
                     if (!empty($owner->email)) {
                         $emailformatemodel = EmailFormat::findOne(["id" => Yii::$app->params['EMAIL_TEMPLATE_ID']['welcome'], "status" => '1']);
@@ -160,11 +149,11 @@ class OwnerController extends Controller {
                             $ssSubject = $emailformatemodel->subject;
                             //send email to new registered user
                             Yii::$app->mailer->compose()
-                                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
-                                ->setTo($owner->email)
-                                ->setSubject($ssSubject)
-                                ->setHtmlBody($body)
-                                ->send();
+                                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+                                    ->setTo($owner->email)
+                                    ->setSubject($ssSubject)
+                                    ->setHtmlBody($body)
+                                    ->send();
                         }
                     }
                     $transaction->commit();
@@ -173,9 +162,10 @@ class OwnerController extends Controller {
             }
             $transaction->rollback();
             return CommonApiHelper::return_error_response("Sorry, Please try again.");
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollback();
             return CommonApiHelper::return_error_response("Sorry, Please try again.");
-        }*/
+        }
     }
+
 }

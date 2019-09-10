@@ -12,7 +12,7 @@ use common\models\Users;
     * @property integer $user_id
     * @property string $device_token
     * @property integer $device_type
-    * @property string $access_token
+    * @property string $refresh_token
     * @property string $created_at
     * @property string $updated_at
     *
@@ -37,7 +37,8 @@ public function rules()
             [['user_id', 'device_type'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
-            [['device_token', 'access_token'], 'string', 'max' => 255]
+            [['device_token', 'refresh_token'], 'string', 'max' => 255],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
         ];
 }
 
@@ -51,7 +52,7 @@ return [
     'user_id' => 'User ID',
     'device_token' => 'Device Token',
     'device_type' => 'Device Type',
-    'access_token' => 'Access Token',
+    'refresh_token' => 'Refresh Token',
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
 ];

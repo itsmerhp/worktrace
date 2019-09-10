@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\base\Security;
 use yii\web\IdentityInterface;
 use api\components\CommonApiHelper;
+use common\models\Company;
 
 class Users extends \yii\db\ActiveRecord implements IdentityInterface {
 
@@ -166,6 +167,13 @@ class Users extends \yii\db\ActiveRecord implements IdentityInterface {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompany() {
+        return $this->hasOne(Company::className(), ['id' => 'company_id']);
     }
 
 }

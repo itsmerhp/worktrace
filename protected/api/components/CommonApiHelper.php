@@ -110,7 +110,7 @@ class CommonApiHelper {
             $errorMessage = implode(", ", $required);
         }
         if (!empty($errorMessage)) {
-            return CommonApiHelper::encodeResponseJSON(CommonApiHelper::return_error_response("Required:", $errorMessage, "-3"));
+            return CommonApiHelper::encodeResponseJSON(CommonApiHelper::return_error_response($errorMessage, "-3"));
         } else {
             return;
         }
@@ -541,6 +541,59 @@ class CommonApiHelper {
             $ratingHtml .= '<span class="fa fa-star"></span>';
         }
         return $ratingHtml;
+    }
+
+    //generate access token
+    public static function generateAccessToken($user_id, $refresh_token) {
+        $token = Yii::$app->jwt->getBuilder()
+                ->setIssuer(Yii::getAlias('@host'))
+                ->setAudience(Yii::getAlias('@host'))
+                //->setId(time(), true)
+                ->setIssuedAt(time())
+                //->setNotBefore(time() + 60) // Configures the time before which the token cannot be accepted (nbf claim)
+                ->setExpiration(time() + 24 * 60 * 60)
+                ->set('user_id', $user_id)
+                ->set('refresh_token', $refresh_token)
+                ->getToken();
+        return (string) $token;
+    }
+
+    //validate access token
+    public static function validateAccessToken() {
+        try {
+            $access_token = Yii::$app->request->headers->get('Authorization');
+            if ($access_token) {
+                $token = Yii::$app->jwt->getParser()->parse((string) $access_token); // Parses from a string
+                $data = Yii::$app->jwt->getValidationData();
+                if (!$token->validate($data)) {
+                    self::encodeResponseJSON(self::return_error_response("Please pass valid access token.", "-2"));
+                } else {
+                    $refreshToken = $token->getClaim('refresh_token');
+                    $userId = $token->getClaim('user_id');
+                    $userDetails = UsersAccessTokens::find()
+                            ->with(['user' => function ($query) {
+                                $query->with(['company']);
+                                return $query;
+                            }])->where(['refresh_token'=>$refreshToken,'users_access_tokens.user_id'=>$userId])
+                            ->one();
+                    if($userDetails){
+                        if($userDetails->user->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])){
+                            self::encodeResponseJSON(self::return_error_response("Your account is Inactive. Please contact Administrator for more details.", "-1"));
+                        }else if($userDetails->user->company->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])){
+                            self::encodeResponseJSON(self::return_error_response("Company is Inactive. Please contact Administrator for more details.", "-1"));
+                        }else{
+                            return $userDetails;
+                        }
+                    }else{
+                        self::encodeResponseJSON(self::return_error_response("Please pass valid access token.", "-2"));
+                    }
+                }
+            } else {
+                self::encodeResponseJSON(self::return_error_response("Please pass access token.", "-2"));
+            }
+        } catch (\Exception $e) {
+            self::encodeResponseJSON(self::return_error_response("Please pass valid access token.", "-2"));
+        }
     }
 
 }

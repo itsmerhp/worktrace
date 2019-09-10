@@ -44,6 +44,10 @@ return [
         'generallib' => [
             'class' => 'common\components\Generallib',
         ],
+        'jwt' => [
+            'class' => 'sizeg\jwt\Jwt',
+            'key'   => 'WorkTraceJwtSecretKey',
+        ],
     ],
     'aliases' => [
         '@uploads' => '@appRoot/uploads',

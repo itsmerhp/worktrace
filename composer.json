@@ -24,7 +24,8 @@
         "pigochu/yii2-jquery-locationpicker": ">=0.1.0",
         "keygenqt/yii2-autocomplete-ajax": "*",
         "budyaga/yii2-cropper": "*",
-        "php-ffmpeg/php-ffmpeg": "^0.13.0"
+        "php-ffmpeg/php-ffmpeg": "^0.13.0",
+        "sizeg/yii2-jwt": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
