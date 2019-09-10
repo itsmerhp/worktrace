@@ -146,7 +146,11 @@ class UserController extends Controller {
             $userdata = Users::find()->with(['company'])->where(['email' => $post['email']])->one();
 
             if (!empty($userdata)) {
-                if ($userdata->status == 1) {
+                if ($userdata->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])) {
+                    return CommonApiHelper::return_error_response("Your account is Inactive. Please contact Administrator for more details.", "-1");
+                } else if ($userdata->company->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])) {
+                    return CommonApiHelper::return_error_response("Company is Inactive. Please contact Administrator for more details.", "-1");
+                } else {
                     if (!empty($post['password']) && password_verify($post['password'], $userdata->password)) {
                         //Save/update access token of user
                         $refresh_token = Yii::$app->security->generateRandomString(255);
@@ -196,8 +200,6 @@ class UserController extends Controller {
                     } else {
                         return CommonApiHelper::return_error_response("Please enter correct email or password", "2");
                     }
-                } else {
-                    return CommonApiHelper::return_error_response("Your account is Inactive. Please contact Administrator for more details.", "3");
                 }
             } else {
                 return CommonApiHelper::return_error_response("Your are not registered, please signup.", "4");
