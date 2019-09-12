@@ -20,6 +20,7 @@ use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
 use common\models\EmailFormat;
 use common\models\UsersAccessTokens;
+use common\models\Departments;
 
 /**
  * Description of OwnerController
@@ -48,9 +49,13 @@ class CompanyController extends Controller {
 
     public function beforeAction($action) {
         $actionName = $action->id;
-        $validateActions = ['subscription-status'];
-        if(in_array($actionName, $validateActions)){
-            $this->userDetails = CommonApiHelper::validateAccessToken();            
+        $validateActions = ['subscription-status' => 'all','add-edit-department' => 'owner','get-departments' => 'owner'];
+        if(in_array($actionName, array_keys($validateActions))){
+            $this->userDetails = CommonApiHelper::validateAccessToken();   
+            $allowedRole = $validateActions[$actionName];
+            if(!($this->userDetails && ($allowedRole == 'all' || (Yii::$app->params['USER_ROLES'][$allowedRole] == $this->userDetails->user->role_id)))){
+                CommonApiHelper::encodeResponseJSON(CommonApiHelper::return_error_response("You don't have rights to perform this action.", "-5"));
+            }
         }
         return parent::beforeAction($action);
     }
@@ -77,5 +82,70 @@ class CompanyController extends Controller {
             return CommonApiHelper::return_error_response("Sorry, Please try again.");
         }
     }
+    
+    /**
+     * Owner > Add / Edit department
+     */
+    public function actionAddEditDepartment() {
+        //validate webservice
+        $requiredParams = ['name'];
 
+        CommonApiHelper::validateRequestParameters($requiredParams);
+
+        $response = [];
+
+        try {
+            $transaction = Yii::$app->db->beginTransaction();
+            //Get request parameters.
+            $post = Yii::$app->request->bodyParams;
+            $post = array_map('trim', $post);
+
+            $name = $post['name'];
+            $department_id = isset($post['department_id']) && !empty($post['department_id']) ? $post['department_id'] : NULL;
+            
+            //save / update company
+            if(!empty($department_id)){
+                $department = Departments::find()->where(['id' => $department_id])->one();
+                $department->status = isset($post['status']) ? $post['status'] : $department->status;
+            }else{
+                $department = new Departments();
+                $department->company_id = $this->userDetails->user->company->id;
+                $department->status = isset($post['status']) ? $post['status'] : array_search('Active', Yii::$app->params['STATUS_SELECT']);
+            }
+            
+            $department->name = $name;
+            
+            if ($department->save(false)) {
+                $transaction->commit();
+                $response[] = [
+                    'department_id' => $department->id,
+                    'name' => $department->name,
+                ];
+                $successMessage = "New department has been ".($department_id?"updated" : "created")." successfully.";
+                return CommonApiHelper::return_success_response($successMessage, $response);
+            }
+            $transaction->rollback();
+            return CommonApiHelper::return_error_response("Sorry, Please try again.");
+       } catch (\Exception $e) {
+            $transaction->rollback();
+            return CommonApiHelper::return_error_response("Sorry, Please try again.");
+        }
+    }
+    
+    /**
+     * Owner > get department list
+     */
+    public function actionGetDepartments() {
+        try {
+            //Fetch departments of company
+            $departments = Departments::find()->select(['id as department_id','name'])->where(['company_id' => $this->userDetails->user->company->id,'status' => array_search('Active', Yii::$app->params['STATUS_SELECT'])])->asArray()->all();
+            if(!empty($departments)){                
+                return CommonApiHelper::return_success_response("", $departments);
+            }else{
+                return CommonApiHelper::return_error_response("No department found.","2");
+            }
+        } catch (\Exception $e) {
+             return CommonApiHelper::return_error_response("Sorry, Please try again.");
+        }
+    }
 }

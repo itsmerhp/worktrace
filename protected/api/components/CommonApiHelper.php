@@ -96,7 +96,7 @@ class CommonApiHelper {
         $errorMessage = "";
         if (!empty($request)) {
             //Fetch keys of request parameters
-            //$request = array_filter($request);
+            $request = array_filter($request);
             $request = array_keys($request);
 
             //Find difference between required and request parameters
