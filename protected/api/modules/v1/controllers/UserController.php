@@ -102,14 +102,21 @@ class UserController extends Controller {
                                 return $query;
                             }])->where(['refresh_token' => $refreshToken])
                         ->one();
+                
                 if ($userDetails) {
                     if ($userDetails->user->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])) {
                         return CommonApiHelper::return_error_response("Your account is Inactive. Please contact Administrator for more details.", "-1");
                     } else if ($userDetails->user->company->status == array_search('Inactive', Yii::$app->params['STATUS_SELECT'])) {
                         return CommonApiHelper::return_error_response("Company is Inactive. Please contact Administrator for more details.", "-1");
                     } else {
+                        //generate new refresh token and update it
+                        $refreshToken = Yii::$app->security->generateRandomString(255);
+                        $userDetails->refresh_token = $refreshToken;
+                        $userDetails->save(false);
+                        
                         $data = [
-                            'access_token' => CommonApiHelper::generateAccessToken($userDetails->user->user_id, $refreshToken)
+                            'new_refresh_token' => $refreshToken,
+                            'new_access_token' => CommonApiHelper::generateAccessToken($userDetails->user->user_id, $refreshToken)
                         ];
 
                         $response[] = $data;
